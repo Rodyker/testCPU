@@ -1,47 +1,19 @@
-//used for loading onto FPGA
-
-module top(
-    input CLK,
-    output LED1,
-    output LED2,
-    output LED3,
-    output LED4,
-    output LED5,
-    output LED6,
-    output LED7,
-    output LED8,
-    output LED9,
-    output LED10,
-    input IN1,
-    input IN2,
-    input IN3,
-    input IN4,
-    input IN5,
-    input IN6,
-    input IN7,
-    input IN8,
-    input IN9,
-    input IN10
-);
-assign {LED10, LED8, LED6, LED4, LED2, LED9, LED7, LED5, LED3, LED1} = out_out[9:0];
-
-assign in[9:0] = ~{IN10, IN8, IN6, IN4, IN2, IN9, IN7, IN5, IN3, IN1};
-
-wire clk;
-clock clock(
-    .clk_in(CLK),
-    .clk_out(clk)
+// Tiny Tapeout top module
+module tt_um_Rodyker(
+    input wire clk,
+    input wire rst_n,
+    input wire [7:0] in,
+    output wire [7:0] out,
+    inout wire [7:0] io
 );
 
-//used for testbench
-/*
-module cpu(input CLK, input[15:0] IN);
-assign clk = CLK;
-assign in = IN;
-*/
+// Combine in[7:0] and io[7:0] for 16-bit input
+wire [15:0] tinytapeout_in;
+assign tinytapeout_in = {io, in};
+assign io = 8'bz; // Set io to high impedance so it acts as input
 
-wire[15:0] in;
-
+// Use tinytapeout_in for your internal 'in' bus
+wire[15:0] in = tinytapeout_in;
 
 reg[15:0] bus;
 always @(*) begin
@@ -57,6 +29,13 @@ always @(*) begin
         bus = 16'b0;
     end
 end
+
+// ...instantiate the rest of your CPU as before...
+// All other logic and modules remain unchanged
+
+assign out = out_out[7:0];
+
+endmodule
 
 
 
