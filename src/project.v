@@ -30,12 +30,8 @@ always @(*) begin
     end
 end
 
-// ...instantiate the rest of your CPU as before...
-// All other logic and modules remain unchanged
-
 assign out = out_out[7:0];
 
-endmodule
 
 
 
